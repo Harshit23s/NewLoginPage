@@ -1,43 +1,47 @@
 const express = require("express");
 const cors = require("cors");
 const { google } = require("googleapis");
-require("dotenv").config(); // Load the environment variables
 const mongoose = require("mongoose");
 
 const app = express();
-
-// Use the environment variables
-const PORT = process.env.PORT_NO;
-const MONGO_URI = process.env.MONGO_URI;
-const SHEET_ID = process.env.SHEET_ID;
-
 app.use(cors());
 app.use(express.json());
 
+// Schema
+const User = mongoose.model(
+  "User",
+  new mongoose.Schema({
+    name: String,
+    email: String,
+  })
+);
+
+// Google Sheets Auth
+const auth = new google.auth.GoogleAuth({
+  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS), // Using ENV variable instead of secret.json
+  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+});
+
+// Connect to MongoDB
 mongoose
-  .connect(MONGO_URI, {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((err) => console.error("MongoDB error:", err));
 
-const auth = new google.auth.GoogleAuth({
-  credentials: require("./secret.json"), // Keep your credentials in a separate file
-  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-});
-
-// Save user to sheet and MongoDB
+// Route
 app.post("/", async (req, res) => {
   try {
+    const { name, email } = req.body;
+
     const client = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: client });
 
-    const { name, email } = req.body;
-
-    // Save to Google Sheets
+    // Append to Google Sheet
     await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
+      spreadsheetId: process.env.SHEET_ID,
       range: "Sheet1!A:B",
       valueInputOption: "RAW",
       requestBody: {
@@ -49,15 +53,12 @@ app.post("/", async (req, res) => {
     const newUser = new User({ name, email });
     await newUser.save();
 
-    res.status(200).json({ message: "Saved to Google Sheets and MongoDB" });
+    res.status(200).json({ message: "Saved successfully!" });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error saving data");
+    console.error("Error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// Other routes...
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// ✅ DO NOT USE app.listen() on Vercel
+module.exports = app;
