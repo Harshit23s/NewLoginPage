@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const app = express();
 
 // Use the environment variables
-const PORT = 8000;
+const PORT = process.env.PORT_NO;
 const MONGO_URI = process.env.MONGO_URI;
 const SHEET_ID = process.env.SHEET_ID;
 
