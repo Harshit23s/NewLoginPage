@@ -5,13 +5,17 @@ const UserList = () => {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:3001/data");
+    const res = await axios.get(
+      "http://new-login-page-backend.vercel.app/data"
+    );
     setUsers(res.data);
   };
 
   const handleDelete = async (index) => {
     try {
-      await axios.delete(`http://localhost:3001/delete/${index}`);
+      await axios.delete(
+        `http://new-login-page-backend.vercel.app/delete/${index}`
+      );
       setUsers(users.filter((_, i) => i !== index)); // update UI
     } catch (error) {
       console.error("Delete failed", error);
