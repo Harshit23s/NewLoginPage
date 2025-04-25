@@ -5,13 +5,13 @@ const UserList = () => {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:8000/data");
+    const res = await axios.get("http://localhost:3001/data");
     setUsers(res.data);
   };
 
   const handleDelete = async (index) => {
     try {
-      await axios.delete(`http://localhost:8000/delete/${index}`);
+      await axios.delete(`http://localhost:3001/delete/${index}`);
       setUsers(users.filter((_, i) => i !== index)); // update UI
     } catch (error) {
       console.error("Delete failed", error);

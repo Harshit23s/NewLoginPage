@@ -21,7 +21,7 @@ const RegisterForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000", formData);
+      const response = await axios.post("http://localhost:3001/api", formData);
       console.log("Response from backend:", response.data);
 
       // Redirect to login page after successful registration
