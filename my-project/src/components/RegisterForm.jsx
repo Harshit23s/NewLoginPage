@@ -21,7 +21,10 @@ const RegisterForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3001/api", formData);
+      const response = await axios.post(
+        "http://https://new-login-page-backend.vercel.app//api",
+        formData
+      );
       console.log("Response from backend:", response.data);
 
       // Redirect to login page after successful registration

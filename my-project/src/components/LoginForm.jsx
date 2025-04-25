@@ -15,7 +15,10 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3001/login", formData);
+      const res = await axios.post(
+        "http://https://new-login-page-backend.vercel.app//login",
+        formData
+      );
       if (res.status === 200) {
         navigate("/success");
       }
