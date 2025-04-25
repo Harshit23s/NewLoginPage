@@ -16,7 +16,7 @@ const LoginForm = () => {
 
     try {
       const res = await axios.post(
-        "http://https://new-login-page-backend.vercel.app//login",
+        "https://new-login-page-backend.vercel.app//login",
         formData
       );
       if (res.status === 200) {

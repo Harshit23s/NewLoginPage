@@ -22,7 +22,7 @@ const RegisterForm = () => {
 
     try {
       const response = await axios.post(
-        "http://https://new-login-page-backend.vercel.app//api",
+        "https://new-login-page-backend.vercel.app//api",
         formData
       );
       console.log("Response from backend:", response.data);
