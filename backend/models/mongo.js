@@ -68,9 +68,21 @@ async function saveUser({ name, email }) {
 async function getUserByEmail(email) {
   return await User.findOne({ email });
 }
+// Get all users from MongoDB
+const getAllUsers = async () => {
+  const users = await User.find(); // Get all users
+  return users;
+};
+
+const deleteUserById = async (id) => {
+  const result = await User.findByIdAndDelete(id);
+  return result;
+};
 
 module.exports = {
   connectToDatabase,
   saveUser,
   getUserByEmail,
+  getAllUsers,
+  deleteUserById,
 };

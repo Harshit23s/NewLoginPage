@@ -11,16 +11,27 @@ const UserList = () => {
     setUsers(res.data);
   };
 
-  const handleDelete = async (index) => {
-    try {
-      await axios.delete(
-        `http://new-login-page-backend.vercel.app/delete/${index}`
-      );
-      setUsers(users.filter((_, i) => i !== index)); // update UI
-    } catch (error) {
-      console.error("Delete failed", error);
-    }
-  };
+  // const handleDelete = async (index) => {
+  //   try {
+  //     await axios.delete(
+  //       `http://new-login-page-backend.vercel.app/delete/${index}`
+  //     );
+  //     setUsers(users.filter((_, i) => i !== index)); // update UI
+  //   } catch (error) {
+  //     console.error("Delete failed", error);
+  //   }
+  // };
+
+   const handleDelete = async (userId) => {
+     try {
+       await axios.delete(
+         `http://new-login-page-backend.vercel.app/delete/${userId}` // Pass userId to delete
+       );
+       setUsers(users.filter((user) => user._id !== userId)); // Update UI by filtering out the deleted user
+     } catch (error) {
+       console.error("Delete failed", error);
+     }
+   };
 
   useEffect(() => {
     fetchUsers();

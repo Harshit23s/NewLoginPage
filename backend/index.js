@@ -275,6 +275,43 @@ app.post("/login", async (req, res) => {
   }
 });
 
+const { getAllUsers } = require("./models/mongo");
+
+app.get("/users", async (req, res) => {
+  try {
+    console.log("Fetching all users...");
+
+    await connectToDatabase(process.env.MONGO_URI);
+    const users = await getAllUsers(); // Fetch all users from MongoDB
+
+    res.status(200).json(users); // Return users list as JSON
+  } catch (err) {
+    console.error("🔥 ERROR in /users:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+const { deleteUserById } = require("./models/mongo");
+
+// Delete user by ID
+app.delete("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await connectToDatabase(process.env.MONGO_URI);
+
+    // Delete the user with the provided id
+    const result = await deleteUserById(id);
+    if (!result) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error("🔥 ERROR in /delete:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // Start server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
