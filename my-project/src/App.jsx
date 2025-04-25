@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/success" element={<SuccessPage />} />
-        <Route path="/users" element={<UserList />} />
+        <Route path="/users" element={<UserList/>} />
       </Routes>
     </Router>
   );
